@@ -1,0 +1,30 @@
+{
+  "name": "scratchproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tasselled-Wobbegong-PTRI-6/ScratchProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tasselled-Wobbegong-PTRI-6/ScratchProject/issues"
+  },
+  "homepage": "https://github.com/Tasselled-Wobbegong-PTRI-6/ScratchProject#readme",
+  "dependencies": {
+    "flowbite": "^1.4.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.0.23",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
