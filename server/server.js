@@ -1,27 +1,34 @@
-// CREATE TABLE table_name ();
+const express = require('express');
+const server = express();
+const port = 8080;
 
-BULK INSERT allsides_data
-FROM '/Users/adriankarnani/Documents/Codesmith/*Projects/Scratch Project/ScratchProject/server/AllSides data files/allsides.csv'
-WITH
-(
-        FORMAT='CSV',
-        FIRSTROW=2
-)
+const apiRouter = require('./routes/api');
 
-ALTER TABLE allsides_data
-ADD COLUMN id SERIAL PRIMARY KEY,
-ADD COLUMN name VARCHAR,
-ADD COLUMN bias VARCHAR;
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
-SELECT * FROM allsides_data
+server.use('/api', apiRouter);
 
-INSERT INTO allsides_data(name, bias)
-VALUES ('testName', 'testBias');
 
-DELETE FROM allsides_data
-WHERE id = 1;
 
-ALTER TABLE allsides_data 
-DROP COLUMN id;
 
-\COPY allsides_data FROM '/Users/adriankarnani/Documents/Codesmith/*Projects/Scratch Project/ScratchProject/server/AllSides data files/allsides_twocolumn.csv' DELIMITER ',' CSV HEADER;
+
+
+server.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
+
+server.use((err, req, res, next) => {
+    const defaultErr = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 500,
+      message: { err: 'An error occurred' },
+    };
+    const errorObj = Object.assign({}, defaultErr, err);
+    console.log(errorObj.log);
+    return res.status(errorObj.status).json(errorObj.message);
+  });
+
+  server.listen(PORT, () => {
+    console.log(`Server listening on port: ${PORT}...`);
+  });
+  
+  module.exports = server;

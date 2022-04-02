@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "proxy": "http://localhost:8080",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/Tasselled-Wobbegong-PTRI-6/ScratchProject#readme",
   "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
     "flowbite": "^1.4.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
