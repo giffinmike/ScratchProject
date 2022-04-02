@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express');
 const server = express();
 const port = 8080;
@@ -32,3 +33,26 @@ server.use((err, req, res, next) => {
   });
   
   module.exports = server;
+=======
+const path = require('path');
+const express = require('express');
+
+const app = express();
+const PORT = 3000;
+
+app.use('/build', express.static(path.join(__dirname, '../build')));
+
+app.get('/', (req, res) => {
+  const fileName = path.resolve(__dirname, '../client/index.html');
+  res.sendFile(fileName, (err) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log('sent');
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port: ${PORT}`);
+});
+>>>>>>> ab7d066e0ee2618389a1d0cab9c9bf5c5261e596
