@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js --mode production",
-    "dev": "webpack serve --config webpack.config.js --mode development  --hot --open"
+    "dev": "webpack serve --config webpack.config.js --mode development"
   },
   "repository": {
     "type": "git",
@@ -26,6 +25,8 @@
     "@mui/styled-engine-sc": "^5.5.2",
     "express": "^4.17.3",
     "flowbite": "^1.4.1",
+    "node-fetch": "^2.3.0",
+    "pg": "^8.5.1",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

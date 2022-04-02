@@ -1,19 +1,26 @@
-<<<<<<< HEAD
+const path = require('path');
 const express = require('express');
 const server = express();
-const port = 8080;
+const PORT = 8080;
 
 const apiRouter = require('./routes/api');
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
+server.use('/build', express.static(path.join(__dirname, '../build')));
+
+// app.get('/', (req, res) => {
+//   const fileName = path.resolve(__dirname, '../client/index.html');
+//   res.sendFile(fileName, (err) => {
+//     if (err) {
+//       console.log(err);
+//     }
+//     console.log('sent');
+//   });
+// });
+
 server.use('/api', apiRouter);
-
-
-
-
-
 
 server.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
 
@@ -33,26 +40,3 @@ server.use((err, req, res, next) => {
   });
   
   module.exports = server;
-=======
-const path = require('path');
-const express = require('express');
-
-const app = express();
-const PORT = 3000;
-
-app.use('/build', express.static(path.join(__dirname, '../build')));
-
-app.get('/', (req, res) => {
-  const fileName = path.resolve(__dirname, '../client/index.html');
-  res.sendFile(fileName, (err) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log('sent');
-  });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`);
-});
->>>>>>> ab7d066e0ee2618389a1d0cab9c9bf5c5261e596
