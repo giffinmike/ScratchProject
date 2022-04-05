@@ -1,5 +1,6 @@
 .cardWrap{
     display:flex;
+    align-items: flex-end;
 }
 .Blue{
     background-color: blue;
