@@ -1,6 +1,14 @@
-
 import React from "react";
+import Search from "./components/Search.jsx";
+import Home from "./components/Home.jsx";
 
 export default function App() {
-  return <h1>Hello World</h1>;
+  return (
+    <div>
+      <Search />
+      <Home />
+      <Home />
+      <Home />
+    </div>
+  );
 }
