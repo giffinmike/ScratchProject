@@ -7,7 +7,6 @@ export default function App() {
     <div>
       <Search />
       <Home />
-
     </div>
   );
 }
