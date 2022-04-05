@@ -1,8 +1,11 @@
-.cardWrap{
-    display:flex;
-    align-items: flex-end;
+.cardWrap {
+  display: flex;
+  align-items: flex-start;
 }
-.Blue{
-    background-color: blue;
+.Blue {
+  background-color: blue;
 }
 
+.columns {
+  display: flex;
+}

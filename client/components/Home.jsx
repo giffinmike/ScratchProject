@@ -1,70 +1,63 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import StarBorderPurple500SharpIcon from '@mui/icons-material/StarBorderPurple500Sharp';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import { FixedSizeList, ListChildComponentProps } from "react-window";
 
-export default function ImgMediaCard() {
+function renderRow(props, ListChildComponentProps) {
+  const { index, style } = props;
+
   return (
-    <div>
-    <div className="cardWrap">
-    <Card sx={{ maxWidth: 345 }} display= "inline block">
-        <CardContent>
-            <Typography variant="h4" component="div">
-                Headline</Typography>
-        </CardContent>
-      <CardMedia
-        component="img"
-        alt="green iguana"
-        height="140"
-        image="./images/owl.png"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Bias: Left
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" variant="outlined">Read</Button>
-        <Button size="small" variant="outlined">Share</Button>
-        <Button size="small" variant="outlined">Save</Button>
-      </CardActions>
-    </Card>
-     <Card sx={{ maxWidth: 345 }} display= "inline block">
-     <CardContent>
-         <Typography variant="h4" component="div">
-             Headline</Typography>
-     </CardContent>
-   <CardMedia
-     component="img"
-     alt="green iguana"
-     height="140"
-     image="./images/owl.png"
-   />
-   <CardContent>
-     <Typography gutterBottom variant="h5" component="div">
-       Bias: Left
-     </Typography>
-     <Typography variant="body2" color="text.secondary">
-       Lizards are a widespread group of squamate reptiles, with over 6,000
-       species, ranging across all continents except Antarctica
-     </Typography>
-   </CardContent>
-   <CardActions>
-     <Button size="small" variant="outlined">Read</Button>
-     <Button size="small" variant="outlined">Share</Button>
-     <Button size="small" variant="outlined">Save</Button>
-   </CardActions>
- </Card>
- </div>
- </div>
+    <ListItem style={style} key={index} component="div" disablePadding>
+      <ListItemButton>
+        <ListItemText primary={`Item ${index + 1}`} />
+      </ListItemButton>
+    </ListItem>
   );
 }
+
+export default function VirtualizedList() {
+  return (
+    <div className="cardWrap">
+      <Box
+        sx={{
+          width: "100%",
+          height: 400,
+          maxWidth: 360,
+          bgcolor: "background.paper",
+        }}
+      >
+        <FixedSizeList
+          height={400}
+          width={360}
+          itemSize={46}
+          itemCount={200}
+          overscanCount={5}
+        >
+          {renderRow}
+        </FixedSizeList>
+      </Box>
+     
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
