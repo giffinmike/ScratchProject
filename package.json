@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/Tasselled-Wobbegong-PTRI-6/ScratchProject#readme",
   "dependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.5.3",
     "@mui/styled-engine-sc": "^5.5.2",
     "express": "^4.17.3",
