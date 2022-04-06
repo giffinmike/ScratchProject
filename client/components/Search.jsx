@@ -72,7 +72,7 @@ export default function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Hoot News
+            HOOT
           </Typography>
           <Search>
             <SearchIconWrapper>
