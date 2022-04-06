@@ -1,11 +1,9 @@
 .cardWrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
 }
 .Blue {
   background-color: blue;
 }
 
-.columns {
-  display: flex;
-}

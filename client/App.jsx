@@ -6,7 +6,13 @@ export default function App() {
   return (
     <div>
       <Search />
+      <div className="cardWrap">
       <Home />
+      <Home />
+      <Home />
+      <Home />
+      <Home />
+      </div>
     </div>
   );
 }
