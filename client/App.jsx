@@ -1,7 +1,7 @@
 import React from "react";
-import TestComp from "./components/muiTest.jsx";
 import SignInSide from "./components/SignInSide.js";
+import SignUp from "./components/SignUp.js";
 
 export default function App() {
-  return <SignInSide/>;
+  return <SignUp/>;
 }
