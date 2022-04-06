@@ -1012,7 +1012,6 @@ const arr=[
   const { index, style } = props;
 
   
-  console.log(style)
   return (
     <ListItem style={style} key={index} component="div" disablePadding>
       <ListItemButton onClick={()=>window.open(arr[0][index+1].link)}>
