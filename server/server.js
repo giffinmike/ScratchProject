@@ -4,6 +4,7 @@ const server = express();
 const PORT = 8080;
 
 const apiRouter = require('./routes/api');
+const authRouter = require('./routes/auth');
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
