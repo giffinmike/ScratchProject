@@ -1,90 +1,55 @@
-import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import * as React from 'react';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(2, 2, 2, 2),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(15)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "20ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-}));
-
-export default function SearchAppBar() {
+export default function FullWidthTextField() {console.log(TextField)
   return (
-    <Box sx={{ flexGrow: 1 }} padding="">
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="xl"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h3"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            HOOT
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search Here..."
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-        </Toolbar>
-      </AppBar>
+
+    <Box 
+    sx={{width: 800,
+      
+      height: 100,
+      borderRadius: 10,
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: 8,
+      borderColor: "#FF1616",
+      borderWidth: 10,
+
+      backgroundColor: 'secondary.main'
+       }}>
+        <img className="tempLogo" src="./images/Owlwithlargerfont.png" alt="temp logo"/>
+    <Box
+      sx={{
+        width: 1000,
+        maxWidth: '100%',
+        m:4,
+        borderColor: 'white',
+        backgroundColor: 'common.main',
+
+        borderRadis: 5,
+        
+        
+      }}
+    >
+      <TextField fullWidth label="hoot" id="fullWidth" />
+    </Box>
     </Box>
   );
 }
+
+// export default function LoadingButtons() {
+//   console.log(LoadingButton)
+//   return (
+//     <Stack direction="row" spacing={2}>
+//       <LoadingButton loading variant="outlined">
+//         Submit
+//       </LoadingButton>
+      
+
+//     </Stack>
+//   );
+// }
