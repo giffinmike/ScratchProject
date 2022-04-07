@@ -3,7 +3,7 @@ import Search from "./components/Search.jsx";
 import Home from "./components/Home.jsx";
 import Checkbox from '@mui/material/Checkbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import axios from "axios";
 
 const theme = createTheme({
   palette: {
@@ -14,7 +14,7 @@ const theme = createTheme({
     secondary: {
       main: '#D67747',
       light: '#462210',
-    },
+    }, 
     common: {
       main: '#E8CFC1'
     }
@@ -25,9 +25,18 @@ const theme = createTheme({
 });
 
 
-
-
 export default function App() {
+
+  useEffect(()=>{
+    axios.get("https://localhost:8000/api")
+    .then((response) => {
+      //response here is your data object, save it in state?
+      console.log(response);
+    })
+    .catch(err => {console.log(err)});
+  
+  }, [])
+
 
   return (
   <ThemeProvider theme={theme}>
@@ -44,10 +53,6 @@ export default function App() {
 
     </div>
     </ThemeProvider>
-
-
-
-
 
   );
 }
