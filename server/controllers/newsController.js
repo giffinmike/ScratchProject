@@ -22,6 +22,53 @@ const newsController = {};
 //   return returnString;
 // }
 
+function filterArticle(article){
+  // find bad thumbnails
+  if(article.thumbnail === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1627049796/thumbnail_luxwgj.jpg'){
+    article.thumbnail = '';
+  }
+  // find bad news source logos
+  if(article.source.favicon === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1626528473/favicon_acrnzm.png'){
+    article.source.favicon = '';
+  }
+
+  // convert dates to readable form
+  const months = ['Jan ', 'Feb ', 'Mar ', 'Apr ', 'Jun ', 'Jul ', 'Aug ', 'Sep ', 'Oct ', 'Nov ', 'Dec '];
+  let textDate = '';
+  textDate += months[parseInt(article.published_date.slice(6, 8)) - 1];
+  textDate += (article.published_date.slice(8, 10) + ', ' + article.published_date.slice(0, 4));
+  article.published_date = textDate;
+
+  //replace all unicode, special html, and ascii characters to be the appropriate character in the description. I believe I caught all of them?
+  article.description = article.description.replaceAll('&#x2018;', '\'');
+  article.description = article.description.replaceAll('&#x2019;', '\'');
+  article.description = article.description.replaceAll('&#39;', '\'');
+  article.description = article.description.replaceAll('&amp;quot;', '\"');
+  article.description = article.description.replaceAll('&quot;', '\"');
+  article.description = article.description.replaceAll('&amp;#039;', '\'');
+  article.description = article.description.replaceAll('&#039;', '\'');
+  article.description = article.description.replaceAll('&#x27;', '\'');
+  article.description = article.description.replaceAll('&#x22;', '\"');
+  article.description = article.description.replaceAll('&hellip;', '...');
+  article.description = article.description.replaceAll('&#8230;', '...');
+  article.description = article.description.replaceAll('&nbsp;', '');
+  article.description = article.description.replaceAll('&#x2013;', '-');
+  article.description = article.description.replaceAll('&amp;', '&');
+  article.description = article.description.replaceAll('&#8217;', '\'');
+  article.description = article.description.replaceAll('&#x2026;', '...');
+  //at first I thought if the description still includes [;] (which is an indication of a special character), I would empty the description, but so far my tests indicate I caught all of them.
+  //this if statement is used as a test, and can also be used to empty the description if needed
+  // if(article.description.includes(';')){
+  //   article.description = '';
+  //   console.log(article.description)
+  // }
+  //regex pattern to give everything before ' - '
+  const pattern =  /^(.*?)\ - /;
+  article.title = article.title.match(pattern)[1];
+  //return article
+  return article;
+}
+
 newsController.breakingNews = (req, res, next) => {
   let articlesArray = [];
   fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
@@ -30,29 +77,31 @@ newsController.breakingNews = (req, res, next) => {
     for(let i = 0; i < response.articles.length; i++){
       articlesArray.push(response.articles[i])
     }
-    console.log('fetch call number 1')
+    console.log('fetch call number 1', articlesArray.length)
     fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
 	  .then(response => response.json())
 	  .then(response => {
     for(let i = 0; i < response.articles.length; i++){
       articlesArray.push(response.articles[i])
     }
-    console.log('fetch call number 2')
+    console.log('fetch call number 2', articlesArray.length)
     fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
       .then(response => response.json())
       .then(response => {
-      for(let i = 0; i < response.articles.length; i++){
-        articlesArray.push(response.articles[i])
+        // console.log(response.articles);
+        for(let i = 0; i < response.articles.length; i++){
+          articlesArray.push(response.articles[i])
       }
-      console.log('fetch call number 3')
+      console.log('fetch call number 3', articlesArray.length)
       fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
           .then(response => response.json())
           .then(response => {
           for(let i = 0; i < response.articles.length; i++){
             articlesArray.push(response.articles[i])
           }
-          console.log('fetch call number 4')
+          console.log('fetch call number 4', articlesArray.length)
           res.locals.articles = articlesArray;
+          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
           return next();
           })
       })
@@ -64,6 +113,8 @@ newsController.breakingNews = (req, res, next) => {
 
 newsController.sortNews = (req, res, next) => {
   
+  console.log('Line 110 - Number of articles --> ', res.locals.articles.length);
+
   const returnArray = [[],[],[],[],[]];
   res.locals.articles.forEach ((el, i, arr) => {
     
@@ -80,23 +131,23 @@ newsController.sortNews = (req, res, next) => {
         switch(biasData[i].bias) {
           case 'left':
             // console.log('left -->', publication)
-            returnArray[0].push(el);
+            returnArray[0].push(filterArticle(el));
             break;
           case 'left-center':
             // console.log('left-center -->', publication)  
-            returnArray[1].push(el);
+            returnArray[1].push(filterArticle(el));
             break;
           case 'center':
             // console.log('center -->', publication)  
-            returnArray[2].push(el);
+            returnArray[2].push(filterArticle(el));
             break;
           case 'right-center':
             // console.log('right-center -->', publication)  
-            returnArray[3].push(el);
+            returnArray[3].push(filterArticle(el));
             break;
           case 'right':
           //  console.log('right -->', publication)
-            returnArray[4].push(el);
+            returnArray[4].push(filterArticle(el));
             break;
         };
         break;
@@ -106,14 +157,19 @@ newsController.sortNews = (req, res, next) => {
       // }
     };
   });
-  console.log(returnArray[0].length, returnArray[1].length, returnArray[2].length, returnArray[3].length, returnArray[4].length);
+  // console.log(returnArray[0].length, returnArray[1].length, returnArray[2].length, returnArray[3].length, returnArray[4].length);
   // for(let i = 0; i < returnArray.length; i++){
-
+    res.locals.articles = returnArray;
+    console.log(res.locals.articles.map(el => `${el.length} articles`));
+    // console.log('Left articles --> ', res.locals.articles[0]);
+    return next();
   // }
 }
 
 newsController.searchNews = (req, res, next) => {
-    
+  //req.body
+  //search with req.body data
+  //save those articles in res.locals.articles, go to next middleware which is sort
 }
 
 module.exports = newsController;
