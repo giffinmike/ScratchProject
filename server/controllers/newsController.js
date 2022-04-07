@@ -43,6 +43,7 @@ function filterArticle(article){
   article.description = article.description.replaceAll('&#x2018;', '\'');
   article.description = article.description.replaceAll('&#x2019;', '\'');
   article.description = article.description.replaceAll('&#39;', '\'');
+  article.description = article.description.replaceAll('&rsquo;', '\'');
   article.description = article.description.replaceAll('&amp;quot;', '\"');
   article.description = article.description.replaceAll('&quot;', '\"');
   article.description = article.description.replaceAll('&amp;#039;', '\'');
@@ -56,6 +57,7 @@ function filterArticle(article){
   article.description = article.description.replaceAll('&amp;', '&');
   article.description = article.description.replaceAll('&#8217;', '\'');
   article.description = article.description.replaceAll('&#x2026;', '...');
+  article.description = article.description.replaceAll('&ndash;', '-');
   //at first I thought if the description still includes [;] (which is an indication of a special character), I would empty the description, but so far my tests indicate I caught all of them.
   //this if statement is used as a test, and can also be used to empty the description if needed
   // if(article.description.includes(';')){
@@ -170,6 +172,47 @@ newsController.searchNews = (req, res, next) => {
   //req.body
   //search with req.body data
   //save those articles in res.locals.articles, go to next middleware which is sort
+  let articlesArray = [];
+  fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
+	.then(response => response.json())
+	.then(response => {
+    for(let i = 0; i < response.articles.length; i++){
+      articlesArray.push(response.articles[i])
+    }
+    console.log('fetch call number 1', articlesArray.length)
+    fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
+	  .then(response => response.json())
+	  .then(response => {
+    for(let i = 0; i < response.articles.length; i++){
+      articlesArray.push(response.articles[i])
+    }
+    console.log('fetch call number 2', articlesArray.length)
+    fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
+      .then(response => response.json())
+      .then(response => {
+        // console.log(response.articles);
+        for(let i = 0; i < response.articles.length; i++){
+          articlesArray.push(response.articles[i])
+      }
+      console.log('fetch call number 3', articlesArray.length)
+      fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
+          .then(response => response.json())
+          .then(response => {
+          for(let i = 0; i < response.articles.length; i++){
+            articlesArray.push(response.articles[i])
+          }
+          console.log('fetch call number 4', articlesArray.length)
+          res.locals.articles = articlesArray;
+          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
+          return next();
+          })
+      })
+    }
+  )
+	.catch(err => next(err));
+  })
 }
 
 module.exports = newsController;
+
+//db.query()
