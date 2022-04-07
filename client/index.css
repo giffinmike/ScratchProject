@@ -1,9 +1,27 @@
 .cardWrap {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-.Blue {
-  background-color: blue;
+  margin-top: 50px;
+  gap: 15px;
 }
 
+.biasHeader {
+  color: red,
+  
+  
+}
+
+.columns {
+  display: flex;
+}
+
+
+.sourceIcon{
+  width: 30px;
+  height: 30px;
+  margin-left: 70px;
+}
+
+.build{
+  border-color: black;
+  border-width: 10px;
+}

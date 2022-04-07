@@ -47,6 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "20ch",
       "&:focus": {
         width: "20ch",
+        
       },
     },
   },
@@ -54,7 +55,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} padding="">
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -72,7 +73,7 @@ export default function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Hoot News
+            HOOT
           </Typography>
           <Search>
             <SearchIconWrapper>
