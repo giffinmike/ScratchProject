@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import Search from "./components/Search.jsx";
 import Home from "./components/Home.jsx";
 import Checkbox from '@mui/material/Checkbox';
@@ -18,41 +18,32 @@ const theme = createTheme({
     common: {
       main: '#E8CFC1'
     }
-
-
-
   },
 });
 
 
 export default function App() {
 
+  const [columns, setColumns] = useState(null);
+
   useEffect(()=>{
     axios.get("/api")
     .then((response) => {
-      //response here is your data object, save it in state?
-      console.log(response.data);
-    })
+      setColumns(response.data.map(el => <Home articles={el}/>));})
     .catch(err => {console.log(err)});
-  
   }, [])
 
-
   return (
-  <ThemeProvider theme={theme}>
 
-    <div className="main">
-   <Search />
-      <div className="cardWrap">
-      <Home  />
-      <Home/>
-      <Home/>
-      <Home/>
-      <Home />
+    <ThemeProvider theme={theme}>
+
+      <div className="main">
+        <Search />
+        <div className="cardWrap">
+          {columns}
+        </div>
       </div>
 
-    </div>
     </ThemeProvider>
-
   );
 }
