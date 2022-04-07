@@ -22,6 +22,7 @@ server.use('/build', express.static(path.join(__dirname, '../build')));
 // });
 
 server.use('/api', apiRouter);
+server.use('/auth', authRouter);
 
 server.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
 

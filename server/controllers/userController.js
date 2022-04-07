@@ -1,27 +1,26 @@
-const fs = require('fs');
-const path = require('path');
-
-const mockUsersDb = path.resolve(__dirname, '../models/authModel.json');
+const db = require('../models/newsModel.js');
+const queries = require('queries');
 
 userController.createUser = async (req, res, next) => {
   const { username, password } = req.body
   if (username && password){
     
-    const allUsers = JSON.parse(fs.readFileSync(mockUsersDb));
-    if (allUsers[username]) {
-      const err = {
-        log: 'Username already exists. See userController.createUser',
-        status: 500,
-        message: { err: 'Username already exists. See console.' },
-      };
-      next(err);
-    }
-    
-    allUsers[username] = password;
-    console.log(allUsers);
-    fs.writeFileSync(mockUsersDb, JSON.stringify(allUsers));
-  
-    return next(); 
+    db.query(queries.postUser, [username, password], (queryErr, queryRes) => {
+
+      if (queryErr) {
+        const err = {
+          log: `Query error in postUser: ${queryErr}`,
+          status: 500,
+          message: `A query error occured posting user data. See console.`
+        }
+        return next(err);
+      }
+      console.log('user data post success');
+      res.locals = { username, password };
+
+      return next(); 
+      
+    });
+
   }
-  res.render('../client/signup.ejs', {error: 'go home'})
 };
