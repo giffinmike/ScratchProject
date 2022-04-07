@@ -28,10 +28,10 @@ const theme = createTheme({
 export default function App() {
 
   useEffect(()=>{
-    axios.get("https://localhost:8000/api")
+    axios.get("/api")
     .then((response) => {
       //response here is your data object, save it in state?
-      console.log(response);
+      console.log(response.data);
     })
     .catch(err => {console.log(err)});
   
