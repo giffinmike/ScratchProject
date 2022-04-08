@@ -137,7 +137,7 @@ newsController.breakingNews = (req, res, next) => {
 
 newsController.sortNews = (req, res, next) => {
   
-  console.log('Line 110 - Number of articles --> ', res.locals.articles.length);
+  console.log('Line 140 - Number of articles --> ', res.locals.articles.length);
 
   const returnArray = [[],[],[],[],[]];
   res.locals.articles.forEach ((el, i, arr) => {
@@ -191,14 +191,6 @@ newsController.sortNews = (req, res, next) => {
 }
 
 newsController.searchNews = (req, res, next) => {
-  //req.body
-  //search with req.body data
-  //save those articles in res.locals.articles, go to next middleware which is sort
-  // const searchOptions = {...defaultSearchOptions};
-  // searchOptions.q = req.body;
-
-  // console.log('request line 199 --> ',req);
-  // console.log('req.body -->', req.body);
 
   const searchArray = [0, 1, 2, 3].map((el, i) => {
     const searchOptions = {}
@@ -207,34 +199,17 @@ newsController.searchNews = (req, res, next) => {
     return searchOptions;
   })  
 
-  // searchArray[4] = new Promise((resolve, reject) => {
-  //   res.locals.articles = articlesArray;
-  //   console.log(res.locals.articles);
-  // })
-
-  let articlesArray = [];
-
-  // const runSearch = async (searchArray) => {
-  //   const results = await Promise.all(searchArray.map(el => axios.request(el)));
-  //   articlesArray = results.map
-  // }
-
-
-  Promise.all(searchArray.map(el => {
-    axios.request(el)
-    .then((response) => {
-      // console.log(response.data.articles);
-      for(let i = 0; i < response.data.articles.length; i++){
-        articlesArray.push(response.data.articles[i])
-      }
-      res.locals.articles = articlesArray;
-    })
-    .catch((error) => {
+  const runSearch = async (optionsArray) => {
+    try {
+      const results = await Promise.all(optionsArray.map(el => axios.request(el)));
+      res.locals.articles = results.flatMap(el => el.data.articles);
+      return next();
+    } catch {
       return next(error);
-    });
-  }))
-}
+    }
+  };
+
+  runSearch(searchArray);
+};
 
 module.exports = newsController;
-
-//db.query()
