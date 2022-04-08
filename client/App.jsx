@@ -24,7 +24,6 @@ const theme = createTheme({
 export default function App() {
   const arr = [
     [
-      0,
       {
         published_date: "2022-04-04T08:04:41+00:00",
         title:
@@ -1278,16 +1277,11 @@ export default function App() {
       },
     ],
   ];
-
-  // useEffect(()=>{
+  // //  useEffect(()=>{
   //   axios.get("/api")
   //   .then((response) => {
-
-  //     //response here is your data object, save it in state?
-  //     console.log(response.data);
-  //   })
+  //     setColumns(response.data.map(el => <Home articles={el}/>));})
   //   .catch(err => {console.log(err)});
-
   // }, [])
 
   return (
@@ -1295,7 +1289,7 @@ export default function App() {
       <div className="main">
         <Search />
         <div className="cardWrap">
-          <Home dog={23} />
+          <Home bias={arr[0]} />
           <Home bias={arr[1]} />
           <Home bias={arr[2]} />
           <Home bias={arr[3]} />

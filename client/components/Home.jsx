@@ -22,88 +22,89 @@ import IconButton from "@mui/material/IconButton";
 import StarIcon from "@mui/icons-material/Star";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 
-function renderRow(props, ListChildComponentProps) {
-  const { index, style } = props;
 
-  return (
-    <ListItem
-      sx={{ m: 0 }}
-      style={style}
-      key={index}
-      component="div"
-      disablePadding
-      alignItems="center"
-    >
-      <ListItemButton onClick={() => window.open(arr[0][index + 1].link)}>
-        <Card
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "common.main",
-            borderColor: "secondary.main",
-            boxShadow: 8,
-            border: 1,
-            borderRadius: 5,
-            minWidth: 220,
-            maxWidth: 220,
-            maxHeight: 200,
-            minHeight: 200,
-          }}
-          display="inline block"
-        >
-          <Box
+
+export default function VirtualizedList(keep) {
+console.log(keep.bias.length)
+  function renderRow(props, ListChildComponentProps) {
+    const { index, style } = props;
+  
+    return (
+      <ListItem
+        sx={{ m: 0 }}
+        style={style}
+        key={index}
+        component="div"
+        disablePadding
+        alignItems="center"
+      >
+        <ListItemButton onClick={() => window.open(keep.bias[index].link)}>
+          <Card
             sx={{
-              maxHeight: 35,
-              minHeight: 35,
-              display: "grid",
-              gridTemplateColumns: " 1fr 1fr 1fr;",
-              marginLeft: -6,
-              marginTop: 1,
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "common.main",
+              borderColor: "secondary.main",
+              boxShadow: 8,
+              border: 1,
+              borderRadius: 5,
+              minWidth: 220,
+              maxWidth: 220,
+              maxHeight: 200,
+              minHeight: 200,
             }}
+            display="inline block"
           >
-            <img
-              className="sourceIcon"
-              src={arr[0][index + 1].source.favicon}
-              alt="icon not found"
-            />
-            {arr[0][index + 1].source.title}
-            <CardActions>
-              <IconButton sx={{ left: 25 }} size="small" variant="outlined">
-                <BookmarksIcon />
-              </IconButton>
-            </CardActions>
-          </Box>
-
-          <Box
-            sx={{
-              maxHeight: 25,
-              minHeight: 25,
-            }}
-          >
-            <CardContent>
-              <Typography sx={{ fontSize: 10 }} variant="h6" component="div">
-                {arr[0][index + 1].title}
-              </Typography>
-            </CardContent>
-          </Box>
-          <Box
-            sx={{ m: 5, display: "flex", justifyContent: "center", height: 40 }}
-          >
-            {" "}
-            <img
-              className="mainPhoto"
-              src={arr[0][index + 1].thumbnail}
-              alt="icon not found"
-            />
-          </Box>
-        </Card>
-      </ListItemButton>
-    </ListItem>
-  );
-}
-
-export default function VirtualizedList(props) {
-  console.log(props.dog);
+            <Box
+              sx={{
+                maxHeight: 35,
+                minHeight: 35,
+                display: "grid",
+                gridTemplateColumns: " 1fr 1fr 1fr;",
+                marginLeft: -6,
+                marginTop: 1,
+              }}
+            >
+              <img
+                className="sourceIcon"
+                src={keep.bias[index].source.favicon}
+                alt="icon not found"
+              />
+              {keep.bias[index].source.title}
+              <CardActions>
+                <IconButton sx={{ left: 25 }} size="small" variant="outlined">
+                  <BookmarksIcon />
+                </IconButton>
+              </CardActions>
+            </Box>
+  
+            <Box
+              sx={{
+                maxHeight: 25,
+                minHeight: 25,
+              }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 10 }} variant="h6" component="div">
+                  {keep.bias[index].title}
+                </Typography>
+              </CardContent>
+            </Box>
+            <Box
+              sx={{ m: 5, display: "flex", justifyContent: "center", height: 40 }}
+            >
+              {" "}
+              <img
+                className="mainPhoto"
+                src={keep.bias[index].thumbnail}
+                alt="icon not found"
+              />
+            </Box>
+          </Card>
+        </ListItemButton>
+      </ListItem>
+    );
+  }
 
   return (
     <div>
@@ -134,7 +135,7 @@ export default function VirtualizedList(props) {
           height={570}
           width={250}
           itemSize={215}
-          itemCount={arr[0].length - 1}
+          itemCount={keep.bias.length - 1}
           overscanCount={5}
         >
           {renderRow}

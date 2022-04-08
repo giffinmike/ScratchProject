@@ -17,6 +17,8 @@ module.exports = {
     hot: true,
     proxy: {
       '/api': 'http://localhost:8000',
+      '/search': 'http://localhost:8000',
+      '/auth': 'http://localhost:8000',
     },
   },
   plugins: [
