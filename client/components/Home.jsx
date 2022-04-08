@@ -25,7 +25,7 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 
 export default function VirtualizedList(props) {
-  const {articles} = props;
+  const { articles } = props;
 
   function renderRow(props) {
     const { index, style } = props;
