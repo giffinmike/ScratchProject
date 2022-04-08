@@ -56,14 +56,14 @@ userController.verifyUser = (req, res, next) => {
         log: `Query error in userController.verifyUser: ${queryErr}`,
         status: 500,
         message: 'Error getting user data. See console.'
-      }
+      };
       return next(err);
-    }
+    };
 
     if (queryRes.rows.length === 0) {
       res.locals.loginSuccess = false;
       next();
-    }
+    };
 
     const hash = queryRes.rows[0].password;
     bcrypt.compare(password, hash, function(hashErr, result) {
@@ -77,7 +77,8 @@ userController.verifyUser = (req, res, next) => {
         return next(err);
       };
 
-      res.locals.loginSuccess = result;
+      // if not login success, invalid username/pw
+      res.locals.loginSuccess = result; 
       next();
 
     });

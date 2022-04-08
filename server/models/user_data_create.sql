@@ -5,3 +5,9 @@ CREATE TABLE user_data (
   username VARCHAR(256) NOT NULL UNIQUE, 
   password VARCHAR(127) NOT NULL
 );
+
+CREATE TABLE sessions (
+  _id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user_data(_id)
+)
