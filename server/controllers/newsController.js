@@ -1,6 +1,10 @@
 const fetch = require('node-fetch');
+const axios = require('axios')
+
 const db = require('../models/newsModel');
-const biasData = require('../allSidesData/allsides')
+const biasData = require('../allSidesData/allsides');
+const { search } = require('../server');
+
 
 const options = {
 	method: 'GET',
@@ -10,17 +14,35 @@ const options = {
 	}
 };
 
+const defaultSearchOptions = {
+  method: 'GET',
+  url: 'https://google-news1.p.rapidapi.com/search',
+  params: {
+    q: '',
+    country: 'US',
+    lang: 'en',
+    before: '',
+    limit: '50',
+    when: '30d',
+    media: 'true'
+  },
+  headers: {
+    'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+    'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+  }
+};
+
 const newsController = {};
 
-// function retrieveDate(i){
-  //&before=2022-03-31&after=2022-04-01
-//   var date = new Date();
-//   var yesterday = new Date(date.getTime());
-//   yesterday.setDate(date.getDate() - i);
-//   yesterday = JSON.stringify(yesterday).slice(1,11);
-//   const returnString = `&before=${yesterday}`;
-//   return returnString;
-// }
+function retrieveDate(i){
+  // &before=2022-03-31&after=2022-04-01
+  var date = new Date();
+  var yesterday = new Date(date.getTime());
+  yesterday.setDate(date.getDate() - i);
+  yesterday = JSON.stringify(yesterday).slice(1,11);
+  const returnString = `${yesterday}`;
+  return returnString;
+}
 
 function filterArticle(article){
   // find bad thumbnails
@@ -172,45 +194,45 @@ newsController.searchNews = (req, res, next) => {
   //req.body
   //search with req.body data
   //save those articles in res.locals.articles, go to next middleware which is sort
+  // const searchOptions = {...defaultSearchOptions};
+  // searchOptions.q = req.body;
+
+  // console.log('request line 199 --> ',req);
+  // console.log('req.body -->', req.body);
+
+  const searchArray = [0, 1, 2, 3].map((el, i) => {
+    const searchOptions = {}
+    Object.assign(searchOptions, defaultSearchOptions);
+    Object.assign(searchOptions.params, { q: req.body.query, before: retrieveDate(i)})
+    return searchOptions;
+  })  
+
+  // searchArray[4] = new Promise((resolve, reject) => {
+  //   res.locals.articles = articlesArray;
+  //   console.log(res.locals.articles);
+  // })
+
   let articlesArray = [];
-  fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
-	.then(response => response.json())
-	.then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
-    }
-    console.log('fetch call number 1', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
-	  .then(response => response.json())
-	  .then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
-    }
-    console.log('fetch call number 2', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
-      .then(response => response.json())
-      .then(response => {
-        // console.log(response.articles);
-        for(let i = 0; i < response.articles.length; i++){
-          articlesArray.push(response.articles[i])
+
+  // const runSearch = async (searchArray) => {
+  //   const results = await Promise.all(searchArray.map(el => axios.request(el)));
+  //   articlesArray = results.map
+  // }
+
+
+  Promise.all(searchArray.map(el => {
+    axios.request(el)
+    .then((response) => {
+      // console.log(response.data.articles);
+      for(let i = 0; i < response.data.articles.length; i++){
+        articlesArray.push(response.data.articles[i])
       }
-      console.log('fetch call number 3', articlesArray.length)
-      fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
-          .then(response => response.json())
-          .then(response => {
-          for(let i = 0; i < response.articles.length; i++){
-            articlesArray.push(response.articles[i])
-          }
-          console.log('fetch call number 4', articlesArray.length)
-          res.locals.articles = articlesArray;
-          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
-          return next();
-          })
-      })
-    }
-  )
-	.catch(err => next(err));
-  })
+      res.locals.articles = articlesArray;
+    })
+    .catch((error) => {
+      return next(error);
+    });
+  }))
 }
 
 module.exports = newsController;
