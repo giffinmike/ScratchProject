@@ -152,7 +152,7 @@ export default function VirtualizedList(props) {
         }}
         variant="h6"
         component="div">
-          LEFT
+         { props.bias}
       </Typography>
   
       <Box
