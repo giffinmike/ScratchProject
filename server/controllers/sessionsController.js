@@ -32,12 +32,7 @@ sessionController.deleteExistingSession = (req, res, next) => {
     })
 
 
-  })
-
-  db.query(queries.deleteSession, [username], (userErr, userRes) => {
-
-    
-  })
+  });
 }
 
 sessionController.startSession = (req, res, next) => {
@@ -105,11 +100,11 @@ sessionController.isLoggedIn = (req, res, next) => {
     }
 
     console.log(queryRes.rows);
-    const { expiration } = queryRes.rows[0];
+    let { expiration } = queryRes.rows[0];
     expiration = timestampToMs(expiration);
     if (Date.now() > expiration) {
       res.locals.isLoggedIn = false;
-
+      return next();
     }
     res.locals.isLoggedIn = true;
     return next();
@@ -148,8 +143,11 @@ sessionController.checkUserExists = (req, res, next) => {
 }
 
 const timestampToMs = (timestamp) => {
-  const t = timestamp.split(/[- : . T Z]/);
-  return Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5], t[6]);
+  console.log(`${timestamp}`);
+  console.log(timestamp);
+  const timestampString = JSON.stringify(timestamp);
+  const timeSplit = timestampString.split(/[- : . T Z]/);
+  return Date.UTC(timeSplit[0], timeSplit[1]-1, timeSplit[2], timeSplit[3], timeSplit[4], timeSplit[5], timeSplit[6]);
 }
 
 module.exports = sessionController;
