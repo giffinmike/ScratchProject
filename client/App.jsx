@@ -39,6 +39,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
 
       <div className="main">
+        <HeaderIcons />
         <Search />
         <div className="cardWrap">
           {columns}

@@ -1,4 +1,4 @@
-import * as React from "react";
+import  React, {useState} from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
+
 
 const style = {
   position: "absolute",
@@ -44,7 +46,7 @@ function ChildModal() {
       >
         <Box
           sx={{
-              variant: "outlined",
+            variant: "outlined",
             marginTop: 58,
             marginLeft: 200,
             backgroundColor: "secondary.main",
@@ -99,6 +101,31 @@ export default function NestedModal() {
     setOpen(false);
   };
 
+  const [loginInput, changeLoginInput] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleOnUserNameChange = (event) => {
+    // update state with event.target.value
+    const userInputState = { ...loginInput };
+    userInputState.username = event.target.value;
+    changeLoginInput(userInputState);
+    
+  };
+
+  const handleOnPasswordChange = (event) => {
+    // update state with event.target.value
+    const userInputState = { ...loginInput };
+    userInputState.password = event.target.value;
+    changeLoginInput(userInputState);
+    
+  };
+
+  const onSubmit = (event) => {
+
+  }
+
   return (
     <div className="svg_icons">
       <IconButton
@@ -126,7 +153,7 @@ export default function NestedModal() {
         <Box
           sx={{
             backgroundColor: "secondary.main",
-            marginLeft: 200,
+            marginLeft: 20,
             width: 400,
             marginTop: 20,
             maxHeight: 300,
@@ -142,14 +169,16 @@ export default function NestedModal() {
               id="outlined-basic"
               label="Username"
               variant="outlined"
+              onChange={handleOnUserNameChange}
             />
             <TextField
               sx={{ backgroundColor: "common.main" }}
               id="outlined-basic"
               label="Password"
               variant="outlined"
+              onChange={handleOnPasswordChange}
             />
-            <Button variant="outlined">Submit</Button>
+            <Button variant="outlined" onClick={onSubmit}>Submit</Button>
             <p>
               <b> Not a member? Sign up below</b>
             </p>
@@ -160,117 +189,3 @@ export default function NestedModal() {
     </div>
   );
 }
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "background.paper",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-// };
-
-// export default function BasicModal() {
-//   const [open, setOpen] = React.useState(false);
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => setOpen(false);
-
-//   return (
-// //     <div>
-// //       <IconButton
-// //         onClick={handleOpen}
-// //         className="svg_icons"
-// //         size="large"
-// //         aria-label="account of current user"
-// //         aria-controls="menu-appbar"
-// //         aria-haspopup="true"
-// //         sx={{ color: "#E8CFC1" }}
-// //       >
-// //         <AccountCircle />
-// //       </IconButton>
-// //       <Modal
-// //         open={open}
-// //         onClose={handleClose}
-// //         aria-labelledby="modal-modal-title"
-// //         aria-describedby="modal-modal-description"
-// //       >
-// //         <Box
-// //           component="form"
-// //           sx={{
-// //             "& > :not(style)": { m: 2, width: "25ch" },
-// //             backgroundColor: "secondary.main",
-// //           }}
-// //           noValidate
-// //           autoComplete="off"
-// //         >
-// //           <TextField
-// //             sx={{ backgroundColor: "common.main"}}
-// //             id="outlined-basic"
-// //             label="Username"
-// //             variant="outlined"
-// //           />
-// //           <TextField
-// //             sx={{ backgroundColor: "common.main" }}
-// //             id="outlined-basic"
-// //             label="Password"
-// //             variant="outlined"
-// //           />
-// //           <Button variant="outlined">Submit</Button>
-// //         </Box>
-// //       </Modal>
-// //     </div>
-// );
-// }
-
-// // export default function MenuAppBar() {
-// //   const [auth, setAuth] = React.useState(true);
-// //   const [anchorEl, setAnchorEl] = React.useState(null);
-
-// //   const handleMenu = (event) => {
-// //     setAnchorEl(event.currentTarget);
-// //   };
-
-// //   const handleClose = () => {
-// //     setAnchorEl(null);
-// //   };
-
-// //   return (
-// //     <Box
-// //       sx={{
-// //         width: 100,
-// //         height: 100,
-// //         borderRadius: 10,
-// //         display: "flex",
-// //         alignItems: "center",
-// //         marginTop: 8,
-// //         borderColor: "#FF1616",
-// //         borderWidth: 10,
-
-// //         backgroundColor: "secondary.main",
-// //       }}
-// //     >
-// //       <AppBar position="static">
-// //         <Toolbar>
-// //           {auth && (
-// //             <div>
-// //               <IconButton
-// //                 className="svg_icons"
-// //                 size="large"
-// //                 aria-label="account of current user"
-// //                 aria-controls="menu-appbar"
-// //                 aria-haspopup="true"
-// //                 onClick={<Modal />}
-// //                 sx={{ color: "#E8CFC1" }}
-// //               >
-// //                 <AccountCircle />
-// //               </IconButton>
-
-// //             </div>
-// //           )}
-// //         </Toolbar>
-// //       </AppBar>
-// //     </Box>
-// //   );
-// // }
