@@ -58,7 +58,7 @@ userController.createUser = (req, res, next) => {
 userController.verifyUser = (req, res, next) => {
   const { username, password } = req.body;
 
-  db.query(queries.getUser, [username], (queryErr, queryRes) => {
+  db.query(queries.getUserFromUsername, [username], (queryErr, queryRes) => {
 
     if (queryErr) {
       const err = {

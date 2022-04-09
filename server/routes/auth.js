@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post('/signup', 
   userController.createUser, 
+  sessionController.deleteExistingSession,
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
@@ -20,6 +21,7 @@ router.post('/signup',
 
 router.get('/login', 
   userController.verifyUser, 
+  sessionController.deleteExistingSession,
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
@@ -30,6 +32,7 @@ router.get('/login',
 );
 
 router.get('/verifyLogin',
+  sessionController.checkUserExists,
   sessionController.isLoggedIn,
   (req, res) => {
     res.status(200).json(res.locals);

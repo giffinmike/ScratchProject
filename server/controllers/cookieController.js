@@ -7,7 +7,7 @@ cookieController.setSSIDCookie = async (req, res, next) => {
 
   if (!res.locals.success) return next();
   
-  db.query(queries.getUser, [username], (queryErr, queryRes) => {
+  db.query(queries.getUserFromUsername, [username], (queryErr, queryRes) => {
 
     if (queryErr) {
       const err = {
