@@ -255,13 +255,33 @@ newsController.searchNews = (req, res, next) => {
     return searchOptions;
   })  
   console.log(searchArray[0]);
+  // const runSearch = async (optionsArray) => {
+  //   try {
+  //     const results = await Promise.all(optionsArray.map(el => axios.request(el)));
+  //     // const results = await axios.request(optionsArray[0]);
+  //     // console.log(results.data.articles);
+  //     res.locals.articles = results.map(el => el.data.articles).flat();
+  //     // res.locals.articles = results.data.articles;
+  //     console.log(res.locals.articles);
+  //     return next();
+  //   } catch (error) {
+  //     console.log(error);
+  //     return next(error);
+  //   }
+  // };
   const runSearch = async (optionsArray) => {
     try {
-      // const results = await Promise.all(optionsArray.map(el => axios.request(el)));
-      const results = await axios.request(optionsArray[0]);
-      console.log(results.data.articles);
-      // res.locals.articles = results.flatMap(el => el.data.articles);
-      res.locals.articles = results.data.articles;
+      const results = [];
+
+      for (let i = 0; i < optionsArray.length; i++) {
+        let art = await axios.request(optionsArray[i]);
+        // console.log(art.data.articles);
+        results.push(art.data.articles);
+      }
+
+      console.log('results -->',results);
+      res.locals.articles = results.flat();
+      // res.locals.articles = results.data.articles;
       console.log(res.locals.articles);
       return next();
     } catch (error) {

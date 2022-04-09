@@ -20,6 +20,8 @@ const handleOnChange = event => {
 
   };
 
+  const headers=["Left", "Left Leaning", "Center", "Right Leaning", "Right"]
+
   const handleOnSearch = event => {
     console.log('Click');
     console.log(event.target.value);
@@ -33,7 +35,7 @@ const handleOnChange = event => {
       })
       //props.setColumns
       .then((response) => {
-        props.setColumns(response.data.map(el => <Home articles={el}/>));
+        props.setColumns(response.data.map((el, i) => <Home articles={el} bias={headers[i]}/>));
       })
       .catch(err => console.log(err))
   };
