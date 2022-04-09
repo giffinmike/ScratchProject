@@ -93,60 +93,102 @@ function filterArticle(article){
   return article;
 }
 
+// newsController.breakingNews = (req, res, next) => {
+//   let articlesArray = [];
+//   const optionsBreaking = [
+//   {
+//     method: 'GET',
+//     url: 'https://google-news1.p.rapidapi.com/top-headlines',
+//     params: { country: 'US', lang: 'en', limit: '50', media: 'true' },
+//     headers: {
+//       'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+//       'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+//     }
+//   },
+//   {
+//     method: 'GET',
+//     url: 'https://google-news1.p.rapidapi.com/topic-headlines',
+//     params: { topic: 'NATION', country: 'US', lang: 'en', limit: '50', media: 'true' },
+//     headers: {
+//       'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+//       'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+//     }
+//   },
+//   {
+//     method: 'GET',
+//     url: 'https://google-news1.p.rapidapi.com/search',
+//     params: { q: 'Democrat', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
+//     headers: {
+//       'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+//       'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+//     }
+//   },
+//   {
+//     method: 'GET',
+//     url: 'https://google-news1.p.rapidapi.com/search',
+//     params: { q: 'Republican', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
+//     headers: {
+//       'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+//       'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+//     }
+//   }
+//   ];
+
+//   const runFetch = async (allOptions) => {
+//     try {
+//       const results = await Promise.all(allOptions.map(el => axios.request(el)));
+//       res.locals.articles = results.flatMap(el => el.data.articles);
+//       return next();
+//     }
+//     catch (error) {
+//       console.log(error);
+//       // return next(error)
+//     }
+//   }
+
+//   runFetch(optionsBreaking);
+// };
+
 newsController.breakingNews = (req, res, next) => {
   let articlesArray = [];
-  const optionsBreaking = [
-  {
-    method: 'GET',
-    url: 'https://google-news1.p.rapidapi.com/top-headlines',
-    params: { country: 'US', lang: 'en', limit: '50', media: 'true' },
-    headers: {
-      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
-      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+  fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
+	.then(response => response.json())
+	.then(response => {
+    for(let i = 0; i < response.articles.length; i++){
+      articlesArray.push(response.articles[i])
     }
-  },
-  {
-    method: 'GET',
-    url: 'https://google-news1.p.rapidapi.com/topic-headlines',
-    params: { topic: 'NATION', country: 'US', lang: 'en', limit: '50', media: 'true' },
-    headers: {
-      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
-      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+    console.log('fetch call number 1', articlesArray.length)
+    fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
+	  .then(response => response.json())
+	  .then(response => {
+    for(let i = 0; i < response.articles.length; i++){
+      articlesArray.push(response.articles[i])
     }
-  },
-  {
-    method: 'GET',
-    url: 'https://google-news1.p.rapidapi.com/search',
-    params: { q: 'Democrat', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
-    headers: {
-      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
-      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+    console.log('fetch call number 2', articlesArray.length)
+    fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
+      .then(response => response.json())
+      .then(response => {
+        // console.log(response.articles);
+        for(let i = 0; i < response.articles.length; i++){
+          articlesArray.push(response.articles[i])
+      }
+      console.log('fetch call number 3', articlesArray.length)
+      fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
+          .then(response => response.json())
+          .then(response => {
+          for(let i = 0; i < response.articles.length; i++){
+            articlesArray.push(response.articles[i])
+          }
+          console.log('fetch call number 4', articlesArray.length)
+          res.locals.articles = articlesArray;
+          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
+          return next();
+          })
+      })
     }
-  },
-  {
-    method: 'GET',
-    url: 'https://google-news1.p.rapidapi.com/search',
-    params: { q: 'Republican', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
-    headers: {
-      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
-      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
-    }
-  }
-  ];
-
-  const runFetch = async (allOptions) => {
-    try {
-      const results = await Promise.all(allOptions.map(el => axios.request(el)));
-      res.locals.articles = results.flatMap(el => el.data.articles);
-      return next();
-    }
-    catch (error) {
-      console.log(error);
-      // return next(error)
-    }
-  }
-
-  runFetch(optionsBreaking);
+  )
+	.catch(err => next(err));
+  })
 };
 
 newsController.sortNews = (req, res, next) => {
@@ -212,13 +254,18 @@ newsController.searchNews = (req, res, next) => {
     Object.assign(searchOptions.params, { q: req.body.query, before: retrieveDate(i)})
     return searchOptions;
   })  
-  console.log(searchArray);
+  console.log(searchArray[0]);
   const runSearch = async (optionsArray) => {
     try {
-      const results = await Promise.all(optionsArray.map(el => axios.request(el)));
-      res.locals.articles = results.flatMap(el => el.data.articles);
+      // const results = await Promise.all(optionsArray.map(el => axios.request(el)));
+      const results = await axios.request(optionsArray[0]);
+      console.log(results.data.articles);
+      // res.locals.articles = results.flatMap(el => el.data.articles);
+      res.locals.articles = results.data.articles;
+      console.log(res.locals.articles);
       return next();
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   };

@@ -34,7 +34,7 @@ export default function App() {
   useEffect(()=>{
     axios.get("/api")
     .then((response) => {
-      setColumns(response.data.map(el => <Home articles={el} bias={headers[i]}/>));})
+      setColumns(response.data.map((el, i) => <Home articles={el} bias={headers[i]}/>));})
     .catch(err => {console.log(err)});
   }, [])
 
