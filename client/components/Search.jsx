@@ -5,8 +5,41 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function FullWidthTextField() {console.log(TextField)
+export default function FullWidthTextField(props) {
+
+ 
+
+
+const handleOnChange = event => {
+    console.log('Click');
+    console.log(event.target.value);
+
+
+  };
+
+  const handleOnSearch = event => {
+    console.log('Click');
+    console.log(event.target.value);
+    if (event.key==="Enter"){
+      axios({
+        method: 'get',
+        url: '/api/search',
+        data: event.target.value,
+      })
+      //props.setColumns
+      .then((response) => {
+        setColumns(response.data.map(el => <Home articles={el}/>));
+      })
+      .catch(err => console.log(err));
+
+
+  }
+  }
+
   return (
+    
+
+    
 
     <Box 
     sx={{width: 800,
@@ -20,7 +53,7 @@ export default function FullWidthTextField() {console.log(TextField)
       borderWidth: 10,
 
       backgroundColor: 'secondary.main'
-       }}>
+       }}>\
         <img className="tempLogo" src="./images/Owlwithlargerfont.png" alt="temp logo"/>
     <Box
       sx={{
@@ -30,12 +63,13 @@ export default function FullWidthTextField() {console.log(TextField)
         borderColor: 'white',
         backgroundColor: 'common.main',
 
+
         borderRadis: 5,
         
         
       }}
     >
-      <TextField fullWidth label="hoot" id="fullWidth" />
+      <TextField onKeyDown={handleOnSearch} onChange={handleOnChange} fullWidth label="hoot" id="fullWidth" />
     </Box>
     </Box>
   );

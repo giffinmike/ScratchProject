@@ -16,7 +16,8 @@ const theme = createTheme({
       light: '#462210',
     }, 
     common: {
-      main: '#E8CFC1'
+      main: '#E8CFC1',
+      light: '#f1e2da'
     }
   },
 });
@@ -32,6 +33,7 @@ export default function App() {
       setColumns(response.data.map(el => <Home articles={el}/>));})
     .catch(err => {console.log(err)});
   }, [])
+
 
   return (
 

@@ -16,6 +16,8 @@ import Modal from '@mui/material/Modal';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import Stack from '@mui/material/Stack';
+import PropTypes from 'prop-types';
+
 
 import IconButton from '@mui/material/IconButton';
 
@@ -27,6 +29,8 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 export default function VirtualizedList(props) {
   const { articles } = props;
 
+
+
   function renderRow(props) {
     const { index, style } = props;
 
@@ -36,9 +40,13 @@ export default function VirtualizedList(props) {
         <ListItemButton onClick={()=>window.open(articles[index].link)}>
         
           <Card sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: "common.main",
+            display: 'grid',
+            gap: 1,
+            gridTemplateColumns: ' 40px 80px 70px 28px ',
+            gridTemplateRows: '40px 33px 12px 78px ',
+
+
+            backgroundColor: "common.light",
             borderColor:"secondary.main",
             boxShadow: 8,
             border:1,
@@ -49,43 +57,85 @@ export default function VirtualizedList(props) {
             minHeight: 200 }}
             display= "inline block">
            
-            <Box sx={{
-              maxHeight: 35,
-              minHeight: 35,
-              display:'grid',
-              gridTemplateColumns: ' 1fr 1fr 1fr;',
-              marginLeft:-6,
-              marginTop:1
-              }}> 
-             
-              <img className="sourceIcon" src={articles[index].source.favicon} alt="icon not found"/> 
-              {articles[index].source.title}
+           
+           <Box
+        component="img"
+        sx={{
+          marginTop: 1.5,
+         marginLeft: 1,
+          height: 30,
+          width: 30,
+          gridColumnStart: 1,
+          gridColumnEnd: "span 1",
+          gridRowStart: 1,
+          gridRowEnd: 'span 1',
+                }}
+        alt="The house from the offer."
+        src={articles[index].source.favicon}
+      />
+
+<Typography sx={{
+   marginTop: 1.5,
+  fontSize:12,
+  gridColumnStart: 2,
+  gridColumnEnd: "span 1",
+  gridRowStart: 1,
+  gridRowEnd: 'span 1',
+  }}
+  variant="h1" component="div">
+{articles[index].source.title}               
+ </Typography>
+              
         
-              <CardActions>
-                <IconButton sx={{ left: 25 }} size="small" variant="outlined"><BookmarksIcon/></IconButton>
+              <CardActions sx={{
+   marginLeft: -5,
+  gridColumnStart: 4,
+  gridColumnEnd: "span 1",
+  gridRowStart: 1,
+  gridRowEnd: 'span 1',
+  }}>
+                <IconButton  size="small" variant="outlined"><BookmarksIcon/></IconButton>
               </CardActions>
-            </Box>
+      
     
-            <Box sx={{
-              maxHeight: 25,
-              minHeight: 25 
-              }}>
+          
   
-              <CardContent>
+              <CardContent sx={{
+   marginTop: -1.5,
+   marginLeft: -1,
+  fontSize:12,
+  gridColumnStart: 1,
+  gridColumnEnd: "span 4",
+  gridRowStart: 2,
+  gridRowEnd: 'span 1',
+  }}>
                 <Typography sx={{fontSize:10}}variant="h6" component="div">
-                  {articles[index].title}
+                  {articles[index].title.slice(0,100) + "..."}
                 </Typography>
               </CardContent>
-            </Box>
+
+              
+
+              <Box
+        component="img"
+        sx={{
+          borderRadius: 1,
+          marginLeft: -2.5,
+         width: 150,
+         height: 80,
+        justifySelf: 'center',
+          gridColumnStart: 1,
+          gridColumnEnd: "span 4",
+          gridRowStart: 4,
+          gridRowEnd: 'span 1',
+                }}
+        alt="The house from the offer."
+        src={articles[index].thumbnail} 
+      />
+
+         
   
-            <Box sx={{
-              m:5,
-              display: 'flex',
-              justifyContent: "center",
-              height:40}}
-              >
-              <img className="mainPhoto" src={articles[index].thumbnail} alt="icon not found"/> 
-            </Box>
+       
           </Card>
         </ListItemButton>
       </ListItem>
@@ -109,6 +159,7 @@ export default function VirtualizedList(props) {
       
         sx={{
           borderRadius:"borderRadius",
+          borderRadius: 5,
           color: "#1769aa",
           boxShadow: 10,
           mt: 2,
@@ -122,7 +173,7 @@ export default function VirtualizedList(props) {
         }}
         >
         <FixedSizeList
-          height={570}
+          height={580}
           width={250}
           itemSize={215}
           itemCount={articles.length-1}

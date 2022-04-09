@@ -8,6 +8,12 @@ body {
   background-color: #2B2012;
 }
 
+.card{
+  display: gird;
+  grid-template-columns: repeat(5, 4fr);
+
+}
+
 .main{
   display: flex;
   flex-direction: column;
