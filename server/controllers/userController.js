@@ -28,14 +28,19 @@ userController.createUser = (req, res, next) => {
             'Username already exists. Please try again.' :
             'A query error occured posting user data. See console.';
           const err = {
-            log: `Query error in postUser: ${parsedQueryErr}`,
+            log: `Query error in userControl.createUser: ${parsedQueryErr}`,
             status: 500,
             message
           }
           return next(err);
         }
         
-        res.locals = { username, hash, userCreated: true };
+        res.locals = { 
+          username, 
+          hash, 
+          signUpSuccess: true, 
+          success: true 
+        };
   
         return next(); 
   
@@ -43,6 +48,10 @@ userController.createUser = (req, res, next) => {
 
     });
 
+  } else {
+    console.log(username, password);
+    res.locals.success = false;
+    return next();
   }
 };
 
@@ -61,8 +70,9 @@ userController.verifyUser = (req, res, next) => {
     };
 
     if (queryRes.rows.length === 0) {
-      res.locals.loginSuccess = false;
-      next();
+      res.locals.verificationSuccess = false;
+      res.locals.success = false;
+      return next();
     };
 
     const hash = queryRes.rows[0].password;
@@ -77,9 +87,9 @@ userController.verifyUser = (req, res, next) => {
         return next(err);
       };
 
-      // if not login success, invalid username/pw
-      res.locals.loginSuccess = result; 
-      next();
+      res.locals.verificationSuccess = result; 
+      res.locals.success = true;
+      return next();
 
     });
 

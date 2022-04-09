@@ -9,5 +9,6 @@ CREATE TABLE user_data (
 CREATE TABLE sessions (
   _id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
+  expiration TIMESTAMP DEFAULT(NOW() + INTERVAL '1 minutes'),
   FOREIGN KEY (user_id) REFERENCES user_data(_id)
 )

@@ -1,8 +1,12 @@
 const db = require('../models/newsModel.js');
 const queries = require('./queries.js');
 
-sessionController.startSession = async (req, res, next) => {
+const sessionController = {};
+
+sessionController.startSession = (req, res, next) => {
   const { username } = req.body;
+
+  if (!res.locals.success) return next();
 
   db.query(queries.getUser, [username], (userErr, userRes) => {
 
@@ -16,7 +20,8 @@ sessionController.startSession = async (req, res, next) => {
     };
 
     if (userRes.rows.length === 0) {
-      res.locals.sessionSuccess = false;
+      res.locals.startSessionSuccess = false;
+      res.locals.success = false;
       next();
     }
 
@@ -32,13 +37,16 @@ sessionController.startSession = async (req, res, next) => {
         return next(err);
       };
   
-      console.log(queryRes);
-      res.locals.sessionSuccess = true;
+      res.locals.startSessionSuccess = true;
       next();
   
     });
 
   });
 };
+
+sessionController.isLoggedIn = (req, res, next) => {
+  
+}
 
 module.exports = sessionController;

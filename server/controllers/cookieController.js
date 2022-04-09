@@ -4,6 +4,8 @@ const queries = require('./queries.js');
 
 cookieController.setSSIDCookie = async (req, res, next) => {
   const { username } = req.body;
+
+  if (!res.locals.success) return next();
   
   db.query(queries.getUser, [username], (queryErr, queryRes) => {
 
@@ -17,11 +19,12 @@ cookieController.setSSIDCookie = async (req, res, next) => {
     };
 
     if (queryRes.rows.length === 0) {
-      res.locals.cookieSuccess = false;
+      res.locals.setCookieSuccess = false;
+      res.locals.success = false;
       return next();
     }
 
-    res.locals.cookieSuccess = true;
+    res.locals.setCookieSuccess = true;
     const userId = queryRes.rows[0]._id;
     res.cookie('ssid', userId, { httpOnly: true });
     next();
