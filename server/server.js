@@ -1,12 +1,15 @@
 const path = require('path');
 const express = require('express');
 const server = express();
+const cookieParser = require('cookie-parser');
 const PORT = 8000;
 
 const apiRouter = require('./routes/api');
+const authRouter = require('./routes/auth');
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+server.use(cookieParser());
 
 server.use('/build', express.static(path.join(__dirname, '../build')));
 
@@ -21,6 +24,7 @@ server.use('/build', express.static(path.join(__dirname, '../build')));
 // });
 
 server.use('/api', apiRouter);
+server.use('/auth', authRouter);
 
 server.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
 

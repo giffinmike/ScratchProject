@@ -1,6 +1,10 @@
 const fetch = require('node-fetch');
+const axios = require('axios')
+
 const db = require('../models/newsModel');
-const biasData = require('../allSidesData/allsides')
+const biasData = require('../allSidesData/allsides');
+// const { search } = require('../server');
+
 
 const options = {
 	method: 'GET',
@@ -10,26 +14,44 @@ const options = {
 	}
 };
 
+const defaultSearchOptions = {
+  method: 'GET',
+  url: 'https://google-news1.p.rapidapi.com/search',
+  params: {
+    q: '',
+    country: 'US',
+    lang: 'en',
+    before: '',
+    limit: '50',
+    when: '30d',
+    media: 'true'
+  },
+  headers: {
+    'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+    'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+  }
+};
+
 const newsController = {};
 
-// function retrieveDate(i){
-  //&before=2022-03-31&after=2022-04-01
-//   var date = new Date();
-//   var yesterday = new Date(date.getTime());
-//   yesterday.setDate(date.getDate() - i);
-//   yesterday = JSON.stringify(yesterday).slice(1,11);
-//   const returnString = `&before=${yesterday}`;
-//   return returnString;
-// }
+function retrieveDate(i){
+  // &before=2022-03-31&after=2022-04-01
+  var date = new Date();
+  var yesterday = new Date(date.getTime());
+  yesterday.setDate(date.getDate() - i);
+  yesterday = JSON.stringify(yesterday).slice(1,11);
+  const returnString = `${yesterday}`;
+  return returnString;
+}
 
 function filterArticle(article){
   // find bad thumbnails
   if(article.thumbnail === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1627049796/thumbnail_luxwgj.jpg'){
-    article.thumbnail = '';
+    article.thumbnail = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQynkol1VMGE-dwybU5_FMFGpzNkJMR-d09eQ&usqp=CAU';
   }
   // find bad news source logos
   if(article.source.favicon === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1626528473/favicon_acrnzm.png'){
-    article.source.favicon = '';
+    article.source.favicon = 'https://www.pikpng.com/pngl/m/515-5153151_owl-vector-png.png';
   }
 
   // convert dates to readable form
@@ -73,49 +95,63 @@ function filterArticle(article){
 
 newsController.breakingNews = (req, res, next) => {
   let articlesArray = [];
-  fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
-	.then(response => response.json())
-	.then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
+  const optionsBreaking = [
+  {
+    method: 'GET',
+    url: 'https://google-news1.p.rapidapi.com/top-headlines',
+    params: { country: 'US', lang: 'en', limit: '50', media: 'true' },
+    headers: {
+      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
     }
-    console.log('fetch call number 1', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
-	  .then(response => response.json())
-	  .then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
+  },
+  {
+    method: 'GET',
+    url: 'https://google-news1.p.rapidapi.com/topic-headlines',
+    params: { topic: 'NATION', country: 'US', lang: 'en', limit: '50', media: 'true' },
+    headers: {
+      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
     }
-    console.log('fetch call number 2', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
-      .then(response => response.json())
-      .then(response => {
-        // console.log(response.articles);
-        for(let i = 0; i < response.articles.length; i++){
-          articlesArray.push(response.articles[i])
-      }
-      console.log('fetch call number 3', articlesArray.length)
-      fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
-          .then(response => response.json())
-          .then(response => {
-          for(let i = 0; i < response.articles.length; i++){
-            articlesArray.push(response.articles[i])
-          }
-          console.log('fetch call number 4', articlesArray.length)
-          res.locals.articles = articlesArray;
-          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
-          return next();
-          })
-      })
+  },
+  {
+    method: 'GET',
+    url: 'https://google-news1.p.rapidapi.com/search',
+    params: { q: 'Democrat', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
+    headers: {
+      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
     }
-  )
-	.catch(err => next(err));
-  })
+  },
+  {
+    method: 'GET',
+    url: 'https://google-news1.p.rapidapi.com/search',
+    params: { q: 'Republican', country: 'US', lang: 'en', source: 'cnn.com', limit: '50', when: '30d', media: 'true' },
+    headers: {
+      'X-RapidAPI-Host': 'google-news1.p.rapidapi.com',
+      'X-RapidAPI-Key': '28c1914233msh9110de4ee73575cp1dca2cjsnfffcc805fe3d'
+    }
+  }
+  ];
+
+  const runFetch = async (allOptions) => {
+    try {
+      const results = await Promise.all(allOptions.map(el => axios.request(el)));
+      res.locals.articles = results.flatMap(el => el.data.articles);
+      return next();
+    }
+    catch (error) {
+      console.log(error);
+      // return next(error)
+    }
+  }
+
+  runFetch(optionsBreaking);
 };
 
 newsController.sortNews = (req, res, next) => {
   
-  console.log('Line 110 - Number of articles --> ', res.locals.articles.length);
+  console.log('Line 140 - Number of articles --> ', res.locals.articles.length);
 
   const returnArray = [[],[],[],[],[]];
   res.locals.articles.forEach ((el, i, arr) => {
@@ -169,50 +205,25 @@ newsController.sortNews = (req, res, next) => {
 }
 
 newsController.searchNews = (req, res, next) => {
-  //req.body
-  //search with req.body data
-  //save those articles in res.locals.articles, go to next middleware which is sort
-  let articlesArray = [];
-  fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
-	.then(response => response.json())
-	.then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
+  console.log(req.body.query);
+  const searchArray = [0, 1, 2, 3].map((el, i) => {
+    const searchOptions = {}
+    Object.assign(searchOptions, defaultSearchOptions);
+    Object.assign(searchOptions.params, { q: req.body.query, before: retrieveDate(i)})
+    return searchOptions;
+  })  
+  console.log(searchArray);
+  const runSearch = async (optionsArray) => {
+    try {
+      const results = await Promise.all(optionsArray.map(el => axios.request(el)));
+      res.locals.articles = results.flatMap(el => el.data.articles);
+      return next();
+    } catch (error) {
+      return next(error);
     }
-    console.log('fetch call number 1', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
-	  .then(response => response.json())
-	  .then(response => {
-    for(let i = 0; i < response.articles.length; i++){
-      articlesArray.push(response.articles[i])
-    }
-    console.log('fetch call number 2', articlesArray.length)
-    fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
-      .then(response => response.json())
-      .then(response => {
-        // console.log(response.articles);
-        for(let i = 0; i < response.articles.length; i++){
-          articlesArray.push(response.articles[i])
-      }
-      console.log('fetch call number 3', articlesArray.length)
-      fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
-          .then(response => response.json())
-          .then(response => {
-          for(let i = 0; i < response.articles.length; i++){
-            articlesArray.push(response.articles[i])
-          }
-          console.log('fetch call number 4', articlesArray.length)
-          res.locals.articles = articlesArray;
-          console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
-          return next();
-          })
-      })
-    }
-  )
-	.catch(err => next(err));
-  })
-}
+  };
+
+  runSearch(searchArray);
+};
 
 module.exports = newsController;
-
-//db.query()

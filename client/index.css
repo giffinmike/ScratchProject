@@ -8,6 +8,12 @@ body {
   background-color: #2B2012;
 }
 
+.card{
+  display: gird;
+  grid-template-columns: repeat(5, 4fr);
+
+}
+
 .main{
   display: flex;
   flex-direction: column;
@@ -38,4 +44,9 @@ body {
   width:150px;
   height: 90px;
   padding-left: 60px;
+}
+
+.svg_icons {
+  transform: scale(2.5);
+  justify-content: center;
 }
