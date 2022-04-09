@@ -26,10 +26,13 @@ import BookmarksIcon from "@mui/icons-material/Bookmarks";
 
 export default function VirtualizedList(keep) {
 console.log(keep.bias.length)
+
+
   function renderRow(props, ListChildComponentProps) {
     const { index, style } = props;
   
     return (
+      
       <ListItem
         sx={{ m: 0 }}
         style={style}
@@ -108,6 +111,7 @@ console.log(keep.bias.length)
 
   return (
     <div>
+      
       <Typography
         sx={{ color: "white", fontSize: 40, textAlign: "center" }}
         variant="h6"

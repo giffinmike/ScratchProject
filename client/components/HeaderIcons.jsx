@@ -46,7 +46,7 @@ function ChildModal() {
           sx={{
               variant: "outlined",
             marginTop: 58,
-            marginLeft: 100,
+            marginLeft: 200,
             backgroundColor: "secondary.main",
             width: 200,
           }}
@@ -126,7 +126,7 @@ export default function NestedModal() {
         <Box
           sx={{
             backgroundColor: "secondary.main",
-            marginLeft: 90,
+            marginLeft: 200,
             width: 400,
             marginTop: 20,
             maxHeight: 300,

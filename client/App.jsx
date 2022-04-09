@@ -4,6 +4,8 @@ import Home from "./components/Home.jsx";
 import Checkbox from "@mui/material/Checkbox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import HeaderIcons from "./components/HeaderIcons.jsx";
+
 
 const theme = createTheme({
   palette: {
@@ -1287,6 +1289,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="main">
+        <HeaderIcons />
         <Search />
         <div className="cardWrap">
           <Home bias={arr[0]} />
@@ -1299,4 +1302,3 @@ export default function App() {
     </ThemeProvider>
   );
 }
-("");

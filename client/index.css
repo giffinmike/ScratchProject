@@ -40,3 +40,8 @@ body {
   height: 90px;
   padding-left: 60px;
 }
+
+.svg_icons {
+  transform: scale(2.5);
+  justify-content: center;
+}
