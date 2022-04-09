@@ -4,6 +4,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Home from "./Home.jsx";
+import axios from "axios";
+
 
 export default function FullWidthTextField(props) {
 
@@ -22,18 +25,18 @@ const handleOnChange = event => {
     console.log(event.target.value);
     if (event.key==="Enter"){
       axios({
-        method: 'get',
+        method: 'post',
         url: '/api/search',
-        data: event.target.value,
+        data: {
+          query: event.target.value,
+        },
       })
       //props.setColumns
       .then((response) => {
-        setColumns(response.data.map(el => <Home articles={el}/>));
+        props.setColumns(response.data.map(el => <Home articles={el}/>));
       })
-      .catch(err => console.log(err));
-
-
-  }
+      .catch(err => console.log(err))
+  };
   }
 
   return (
@@ -69,7 +72,7 @@ const handleOnChange = event => {
         
       }}
     >
-      <TextField onKeyDown={handleOnSearch} onChange={handleOnChange} fullWidth label="hoot" id="fullWidth" />
+      <TextField onKeyDown={handleOnSearch} onChange={handleOnChange} fullWidth label="search" id="fullWidth" />
     </Box>
     </Box>
   );

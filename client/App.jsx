@@ -5,6 +5,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 
+import { sampleData } from "./assets/sampleData.js"
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -27,11 +29,17 @@ export default function App() {
 
   const [columns, setColumns] = useState(null);
 
-  useEffect(()=>{
-    axios.get("/api")
-    .then((response) => {
-      setColumns(response.data.map(el => <Home articles={el}/>));})
-    .catch(err => {console.log(err)});
+  // useEffect(()=>{
+  //   axios.get("/api")
+  //   .then((response) => {
+  //     setColumns(response.data.map(el => <Home articles={el}/>));})
+  //   .catch(err => {console.log(err)});
+  // }, [])
+
+    useEffect(()=>{
+   
+      setColumns(sampleData.map(el => <Home articles={el}/>));
+   
   }, [])
 
 
@@ -40,7 +48,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
 
       <div className="main">
-        <Search />
+        <Search setColumns={setColumns}/>
         <div className="cardWrap">
           {columns}
         </div>

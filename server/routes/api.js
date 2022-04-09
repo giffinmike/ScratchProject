@@ -14,7 +14,7 @@ router.get('/',
 );
 
 // //fetch news based on search, order them, send back
-router.get('/search',
+router.use('/search',
   newsController.searchNews,
   newsController.sortNews,
   (req, res) => {

@@ -47,11 +47,11 @@ function retrieveDate(i){
 function filterArticle(article){
   // find bad thumbnails
   if(article.thumbnail === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1627049796/thumbnail_luxwgj.jpg'){
-    article.thumbnail = '';
+    article.thumbnail = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQynkol1VMGE-dwybU5_FMFGpzNkJMR-d09eQ&usqp=CAU';
   }
   // find bad news source logos
   if(article.source.favicon === 'https://res.cloudinary.com/dyexzgvkb/image/upload/v1626528473/favicon_acrnzm.png'){
-    article.source.favicon = '';
+    article.source.favicon = 'https://www.pikpng.com/pngl/m/515-5153151_owl-vector-png.png';
   }
 
   // convert dates to readable form
@@ -133,44 +133,7 @@ newsController.breakingNews = (req, res, next) => {
     }
   }
   ];
-  // fetch('https://google-news1.p.rapidapi.com/top-headlines?country=US&lang=en&limit=50&media=true', options)
-	// .then(response => response.json())
-	// .then(response => {
-  //   for(let i = 0; i < response.articles.length; i++){
-  //     articlesArray.push(response.articles[i])
-  //   }
-  //   console.log('fetch call number 1', articlesArray.length)
-  //   fetch('https://google-news1.p.rapidapi.com/topic-headlines?topic=NATION&country=WORLD&lang=en&limit=50&media=true', options)
-	//   .then(response => response.json())
-	//   .then(response => {
-  //   for(let i = 0; i < response.articles.length; i++){
-  //     articlesArray.push(response.articles[i])
-  //   }
-  //   console.log('fetch call number 2', articlesArray.length)
-  //   fetch('https://google-news1.p.rapidapi.com/search?q=Democrat&country=US&lang=en&limit=50&when=30d&media=true', options)
-  //     .then(response => response.json())
-  //     .then(response => {
-  //       // console.log(response.articles);
-  //       for(let i = 0; i < response.articles.length; i++){
-  //         articlesArray.push(response.articles[i])
-  //     }
-  //     console.log('fetch call number 3', articlesArray.length)
-  //     fetch('https://google-news1.p.rapidapi.com/search?q=Republican&country=US&lang=en&limit=50&when=30d&media=true', options)
-  //         .then(response => response.json())
-  //         .then(response => {
-  //         for(let i = 0; i < response.articles.length; i++){
-  //           articlesArray.push(response.articles[i])
-  //         }
-  //         console.log('fetch call number 4', articlesArray.length)
-  //         res.locals.articles = articlesArray;
-  //         console.log('Line 98 - Number of articles --> ', res.locals.articles.length);
-  //         return next();
-  //         })
-  //     })
-  //   }
-  // )
-	// .catch(err => next(err));
-  // })
+
   const runFetch = async (allOptions) => {
     try {
       const results = await Promise.all(allOptions.map(el => axios.request(el)));
@@ -242,7 +205,7 @@ newsController.sortNews = (req, res, next) => {
 }
 
 newsController.searchNews = (req, res, next) => {
-
+  console.log(req.body.query);
   const searchArray = [0, 1, 2, 3].map((el, i) => {
     const searchOptions = {}
     Object.assign(searchOptions, defaultSearchOptions);
