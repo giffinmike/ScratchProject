@@ -27,7 +27,7 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.76",
     "@mui/material": "^5.6.0",
-    "@mui/styled-engine-sc": "^5.5.2",
+    "@mui/styled-engine-sc": "^5.10.3",
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
